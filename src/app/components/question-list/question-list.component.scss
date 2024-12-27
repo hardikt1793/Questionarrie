@@ -1,0 +1,49 @@
+.content {
+  justify-content: center;
+  flex-wrap: nowrap;
+}
+
+.unanswered-content,
+.answered-content {
+  width: 50%;
+  height: inherit;
+  border-right: 2px solid #264653;
+  border-bottom: 2px solid #264653;
+
+  .list-title {
+    margin: 10px auto;
+    text-align: center;
+    color: #264653;
+    font-weight: 600;
+  }
+}
+
+.answered-content {
+  border-right: none;
+}
+
+.card {
+  margin: 15px;
+  min-height: 70px;
+  width: calc(100% - 30px);
+  padding: 15px;
+  background-color: white;
+  color: black;
+  font-weight: 500;
+  font-size: 16px;
+  border-radius: 6px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  height: inherit;
+  display: flex;
+  flex-direction: column;
+
+  h4 {
+    width: 100%;
+    text-align: center;
+    margin-top: 10px;
+    color: #264653;
+  }
+  .label {
+    margin-left: 0px;
+  }
+}

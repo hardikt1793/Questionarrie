@@ -1,0 +1,52 @@
+.card {
+  width: 70%;
+  min-height: 70px;
+  padding: 20px;
+  margin: 15px auto;
+}
+
+.options-container {
+  span {
+    position: relative;
+    font-weight: bold;
+    color: #264653;
+
+    &::after {
+      content: "\00a0*";
+      position: absolute;
+    }
+  }
+  .option-input {
+    width: 100%;
+  }
+  .label {
+    display: flex;
+    justify-content: center;
+  }
+  .circle {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    border: 2px solid darkgray;
+    margin: 12px 10px 12px 5px;
+
+    &.circle-delete {
+      margin: 12px 5px 12px 10px;
+      position: relative;
+      cursor: pointer;
+
+      &:before {
+        content: "";
+        position: absolute;
+        width: 2px;
+        height: 10px;
+        background-color: #264653;
+        transform: rotate(270deg);
+        margin: 5.5px 4px 5px 9px;
+      }
+    }
+  }
+  .square {
+    border-radius: 6px;
+  }
+}

@@ -1,0 +1,71 @@
+<div class="container">
+  <div class="header">
+    <h2>Create Question</h2>
+    <button class="btn btn-add-question" [routerLink]="['/question-management']">
+      Back
+    </button>
+  </div>
+  <div class="content">
+    <div class="card">
+      <form [formGroup]="questionForm" (ngSubmit)="submitQuestionForm()">
+        <label class="label" [ngClass]="{'invalid': checkFormControlValidation('question')}">
+          <span>Question Text</span>
+          <input type="text" class="form-control" formControlName="question" placeholder="Enter Question">
+          <div class="error" *ngIf="checkFormControlValidation('question')">
+            This field is required.
+          </div>
+        </label>
+        <div class="label" [ngClass]="{'invalid': checkFormControlValidation('questionType')}">
+          <span>Question Type</span>
+          <div class="form-group">
+            <label>
+              <input type="radio" name="questionType" value="single" formControlName="questionType"
+                (change)="onQuestionTypeChange()">Single Choice
+            </label>
+            <br>
+            <label>
+              <input type="radio" name="questionType" value="multiple" formControlName="questionType"
+                (change)="onQuestionTypeChange()">Multiple Choice
+            </label>
+            <br>
+            <label>
+              <input type="radio" name="questionType" value="open" formControlName="questionType"
+                (change)="onQuestionTypeChange()">Open
+            </label>
+          </div>
+          <div class="error" *ngIf="checkFormControlValidation('questionType')">
+            This field is required.
+          </div>
+        </div>
+        <div class="options-container" *ngIf="options.length > 0">
+          <span>Add Options</span>
+          <ng-container formArrayName="options">
+            <ng-container *ngFor="let option of options.controls; let i = index">
+              <div class="label invalid" [ngClass]="{'invalid': getOptionValidation(i)}" [formGroupName]="i">
+                <div class="circle" [ngClass]="{'square': questionForm.value.questionType === 'multiple'}">
+                </div>
+                <div class="option-input">
+                  <input class="form-control" type="text" formControlName="option" placeholder="Enter Option">
+                  <div class="error" *ngIf="getOptionValidation(i)">
+                    This field is required.
+                  </div>
+                </div>
+                <a class="circle circle-delete" *ngIf="options.length > 2" (click)="deleteOption(i)"></a>
+              </div>
+            </ng-container>
+          </ng-container>
+        </div>
+        <div class="add-options" *ngIf="options.length > 0">
+          <button type="button" class="btn btn-add-question" (click)="addNewOption()">
+            Add More Options
+          </button>
+        </div>
+        <div class="action">
+          <button type="submit" class="btn btn-add-question">
+            Submit
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

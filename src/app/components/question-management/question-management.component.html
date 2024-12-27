@@ -1,0 +1,57 @@
+<div class="container">
+  <div class="header header-question-management">
+    <h2>Question Management</h2>
+    <span>
+      <button class="btn btn-add-question" [routerLink]="['/question-list']">
+        Question List
+      </button>
+      <button class="btn btn-add-question" [routerLink]="['/add-question']">
+        Create Question
+      </button>
+    </span>
+  </div>
+  <div class="content">
+    <div class="card" *ngFor="let questionDetails of questionsList">
+      <div class="question-details">
+        <p>
+          <strong>Q: </strong>{{ questionDetails?.question}}
+        </p>
+        <p>
+          <strong>Type: </strong>{{ questionDetails?.questionType !== "open" ? (questionDetails?.questionType |
+          titlecase) + " Choice" : "Open" }}
+        </p>
+        <p>
+          <strong>Created Date: </strong>{{ questionDetails?.createdAt | date:'dd/MM/yyyy, h:mm a' }}
+        </p>
+      </div>
+      <div class="action">
+        <button type="button" class="btn btn-delete-question" (click)="deleteConfirmation(questionDetails?.createdAt)">
+          Delete
+        </button>
+        <button type="button" class="btn btn-edit-question"
+          [routerLink]="['/edit-question',questionDetails?.createdAt]">
+          Edit
+        </button>
+      </div>
+    </div>
+    <div class="card no-records" *ngIf="questionsList?.length === 0 || questionsList === undefined">
+      <h4>No records!</h4>
+    </div>
+  </div>
+</div>
+
+<!-- -------------------- Modal for deleting a question -------------------- -->
+<div id="deleteQuestionModal" class="modal" *ngIf="showDeleteModal">
+  <div class="modal-content">
+    <div class="div-close">
+      <a class="close" (click)="showDeleteModal = false">&times;</a>
+    </div>
+    <div class="div-confirmation">
+      <p>Are you sure you want to delete this question?</p>
+    </div>
+    <div class="div-buttons">
+      <button class="btn btn-delete-question" (click)="deleteQuestion()">Confirm</button>
+      <button class="btn" (click)="showDeleteModal = false">Cancel</button>
+    </div>
+  </div>
+</div>
