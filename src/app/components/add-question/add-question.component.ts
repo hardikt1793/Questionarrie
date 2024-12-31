@@ -8,6 +8,7 @@ import {
 } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Question } from "src/app/models/question.model";
+import { QuestionService } from "src/app/services/question.service";
 
 @Component({
   selector: "app-add-question",
@@ -31,7 +32,8 @@ export class AddQuestionComponent implements OnInit {
   constructor(
     private _fb: FormBuilder,
     private router: Router,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private questionService: QuestionService
   ) {}
 
   ngOnInit(): void {
@@ -46,15 +48,16 @@ export class AddQuestionComponent implements OnInit {
    * Function for getting question details for editing question.
    */
   getQuestionDetails(): void {
-    const questionDetails: Question = JSON.parse(
-      localStorage.getItem("questions")!
-    ).find((element: Question) => element.createdAt === this.questionId);
+    const questionDetails = this.questionService.getQuestionById(
+      this.questionId
+    );
+    if (questionDetails) {
+      questionDetails.options.map(() => {
+        this.addNewOption();
+      });
 
-    questionDetails.options.map(() => {
-      this.addNewOption();
-    });
-
-    this.questionForm.patchValue(questionDetails);
+      this.questionForm.patchValue(questionDetails);
+    }
   }
 
   // Getter function for options formArray
@@ -135,32 +138,14 @@ export class AddQuestionComponent implements OnInit {
       });
     }
 
-    let questionList: Question[] =
-      JSON.parse(localStorage.getItem("questions")!) || [];
-
     if (!!this.questionId) {
-      const index = questionList.findIndex(
-        (element: Question) => element.createdAt === this.questionId
+      this.questionService.updateQuestion(
+        this.questionId,
+        this.questionForm.value
       );
-
-      questionList[index] = this.questionForm.value;
     } else {
-      questionList = [
-        {
-          ...this.questionForm.value,
-          id:
-            questionList.length === 0
-              ? "1"
-              : (
-                  Math.max(
-                    ...questionList.map((element: Question) => +element.id * 1)
-                  ) + 1
-                ).toString(),
-        },
-      ].concat(questionList);
+      this.questionService.addNewQuestion(this.questionForm.value);
     }
-    localStorage.setItem("questions", JSON.stringify(questionList));
-
     this.router.navigate(["question-management"]);
   }
 }

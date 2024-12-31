@@ -1,6 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { Question } from "src/app/models/question.model";
+import { QuestionService } from "src/app/services/question.service";
 
 @Component({
   selector: "app-question-list",
@@ -20,7 +21,10 @@ export class QuestionListComponent implements OnInit {
   // list of unanswered questions
   unansweredQuestionList: Question[] = [];
 
-  constructor(private _fb: FormBuilder) {}
+  constructor(
+    private _fb: FormBuilder,
+    private questionService: QuestionService
+  ) {}
 
   ngOnInit(): void {
     this.getQuestionList();
@@ -30,7 +34,7 @@ export class QuestionListComponent implements OnInit {
    * Get list of questions & divide it in answered & unanswered question list.
    */
   getQuestionList(): void {
-    this.questionList = JSON.parse(localStorage.getItem("questions")!);
+    this.questionList = this.questionService.getQuestionsList;
 
     this.questionList?.map((element: Question) => {
       if (
@@ -155,14 +159,10 @@ export class QuestionListComponent implements OnInit {
         this.answeredQuestionList
       );
 
-      this.questionList = JSON.parse(localStorage.getItem("questions")!);
-      this.questionList[
-        this.questionList.findIndex(
-          (element: Question) => element.createdAt === questionDetails.createdAt
-        )
-      ] = questionDetails;
-
-      localStorage.setItem("questions", JSON.stringify(this.questionList));
+      this.questionService.updateQuestion(
+        questionDetails.createdAt,
+        questionDetails
+      );
     }
   }
 
@@ -194,10 +194,15 @@ export class QuestionListComponent implements OnInit {
       ...this.answeredQuestionList,
     ];
 
-    localStorage.setItem("questions", JSON.stringify(this.questionList));
+    this.questionService.setLocalStorage = this.questionList;
   }
 
-  castAsKeyValue(questionDetails: Question["answer"]) {
-    return questionDetails as { [key: string]: boolean };
+  /**
+   * Convert answer type to key value pair.
+   * @param answer - answer details
+   * @returns
+   */
+  castAsKeyValue(answerDetails: Question["answer"]) {
+    return answerDetails as { [key: string]: boolean };
   }
 }

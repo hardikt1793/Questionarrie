@@ -1,5 +1,6 @@
 import { Component, HostListener, OnInit } from "@angular/core";
 import { Question } from "src/app/models/question.model";
+import { QuestionService } from "src/app/services/question.service";
 
 @Component({
   selector: "app-question-management",
@@ -16,8 +17,14 @@ export class QuestionManagementComponent implements OnInit {
   // flag to show/hide delete modal
   isshowDeleteModal: boolean = false;
 
+  constructor(private questionService: QuestionService) {}
+
   ngOnInit(): void {
-    this.questionsList = JSON.parse(localStorage.getItem("questions")!)?.sort(
+    this.getQuestionsList();
+  }
+
+  private getQuestionsList(): void {
+    this.questionsList = this.questionService.getQuestionsList?.sort(
       (a: Question, b: Question) => {
         const dateA: Date = new Date(a.createdAt),
           dateB: Date = new Date(b.createdAt);
@@ -28,7 +35,6 @@ export class QuestionManagementComponent implements OnInit {
       }
     );
   }
-
   // Function to close modal when the user clicks anywhere outside of it
   @HostListener("click", ["$event"])
   function(event: any) {
@@ -52,12 +58,8 @@ export class QuestionManagementComponent implements OnInit {
    * Delete the question.
    */
   deleteQuestion(): void {
-    this.questionsList = this.questionsList.filter(
-      (element: Question) => element.createdAt !== this.questionId
-    );
-
-    localStorage.setItem("questions", JSON.stringify(this.questionsList));
-
+    this.questionService.deleteQuestionById(this.questionId);
+    this.getQuestionsList();
     this.isshowDeleteModal = false;
   }
 }
