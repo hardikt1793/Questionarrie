@@ -1,68 +1,129 @@
 <div class="container">
   <div class="header">
-    <button class="btn btn-add-question" [routerLink]="['/question-management']">Back</button>
+    <button
+      class="btn btn-add-question"
+      [routerLink]="['/question-management']"
+    >
+      Back
+    </button>
     <h2>Question List</h2>
   </div>
   <div class="content">
     <div class="unanswered-content">
       <div class="list-title">Unanswered Questions</div>
       <form [formGroup]="answersForm">
-        <div class="card" *ngFor="let questionDetails of unansweredQuestionList">
+        <div
+          class="card"
+          *ngFor="let questionDetails of unansweredQuestionList"
+        >
           <div class="question-details">
-            <p>
-              <strong>Q: </strong>{{ questionDetails.question }}
-            </p>
-            <div class="label" [ngClass]="{'invalid': checkFormControlValidation(questionDetails.id)}"
-              *ngIf="questionDetails.questionType === 'single'">
+            <p><strong>Q: </strong>{{ questionDetails.question }}</p>
+            <div
+              class="label"
+              [ngClass]="{
+                invalid: checkFormControlValidation(questionDetails.id)
+              }"
+              *ngIf="questionDetails.questionType === 'single'"
+            >
               <div class="form-group">
-                <ng-container *ngFor="let optionDetails of questionDetails.options">
+                <ng-container
+                  *ngFor="let optionDetails of questionDetails.options"
+                >
                   <label>
-                    <input type="radio" [formControlName]="questionDetails.id" [name]="questionDetails.id"
-                      [value]="optionDetails.option">{{
-                    optionDetails.option }}
+                    <input
+                      type="radio"
+                      [formControlName]="questionDetails.id"
+                      [name]="questionDetails.id"
+                      [value]="optionDetails.option"
+                    />{{ optionDetails.option }}
                   </label>
-                  <br>
+                  <br />
                 </ng-container>
               </div>
-              <div class="error" *ngIf="checkFormControlValidation(questionDetails.id)">
+              <div
+                class="error"
+                *ngIf="checkFormControlValidation(questionDetails.id)"
+              >
                 This field is required.
               </div>
             </div>
-            <div class="label" [ngClass]="{'invalid': checkFormControlValidation(questionDetails.id)}"
-              *ngIf="questionDetails.questionType === 'multiple'">
+            <div
+              class="label"
+              [ngClass]="{
+                invalid: checkFormControlValidation(questionDetails.id)
+              }"
+              *ngIf="questionDetails.questionType === 'multiple'"
+            >
               <div class="form-group">
-                <ng-container *ngFor="let optionDetails of questionDetails.options; let i=index;">
+                <ng-container
+                  *ngFor="
+                    let optionDetails of questionDetails.options;
+                    let i = index
+                  "
+                >
                   <label>
-                    <input type="checkbox" [name]="optionDetails.option.substring(0,3)+ i"
+                    <input
+                      type="checkbox"
+                      [name]="optionDetails.option.substring(0, 3) + i"
                       [value]="optionDetails.option"
-                      [checked]="answersForm.get(questionDetails.id)?.value[optionDetails.option.substring(0,3)+ i]"
-                      (change)="onCheckBoxChange(questionDetails.id, optionDetails.option.substring(0,3)+ i)">{{
-                    optionDetails.option }}
+                      [checked]="
+                        answersForm.get(questionDetails.id)?.value[
+                          optionDetails.option.substring(0, 3) + i
+                        ]
+                      "
+                      (change)="
+                        onCheckBoxChange(
+                          questionDetails.id,
+                          optionDetails.option.substring(0, 3) + i
+                        )
+                      "
+                    />{{ optionDetails.option }}
                   </label>
-                  <br>
+                  <br />
                 </ng-container>
               </div>
               <div class="error" *ngIf="isMCQValid(questionDetails.id)">
                 This field is required.
               </div>
             </div>
-            <label class="label"
-              [ngClass]="{'invalid': checkFormControlValidation(questionDetails.id) || answersForm.get(questionDetails.id)?.value.length > 255}"
-              *ngIf="questionDetails.questionType === 'open'">
-              <textarea class="form-control" placeholder="Enter Question"
-                [formControlName]="questionDetails.id"></textarea>
-              <div class="error" *ngIf="checkFormControlValidation(questionDetails.id)">
+            <label
+              class="label"
+              [ngClass]="{
+                invalid:
+                  checkFormControlValidation(questionDetails.id) ||
+                  answersForm.get(questionDetails.id)?.value.length > 255
+              }"
+              *ngIf="questionDetails.questionType === 'open'"
+            >
+              <textarea
+                class="form-control"
+                placeholder="Enter Question"
+                [formControlName]="questionDetails.id"
+              ></textarea>
+              <div
+                class="error"
+                *ngIf="checkFormControlValidation(questionDetails.id)"
+              >
                 This field is required.
               </div>
-              <div class="error"
-                *ngIf="!checkFormControlValidation(questionDetails.id) && answersForm.get(questionDetails.id)?.value.length > 255">
+              <div
+                class="error"
+                *ngIf="
+                  !checkFormControlValidation(questionDetails.id) &&
+                  answersForm.get(questionDetails.id)?.value.length > 255
+                "
+              >
                 Please enter maximum 255 characters.
               </div>
             </label>
           </div>
           <div class="action">
-            <button class="btn btn-add-question"
-              (click)="submitAnswer(questionDetails, questionDetails.id)">Submit</button>
+            <button
+              class="btn btn-add-question"
+              (click)="submitAnswer(questionDetails, questionDetails.id)"
+            >
+              Submit
+            </button>
           </div>
         </div>
         <div class="card" *ngIf="unansweredQuestionList.length === 0">
@@ -77,35 +138,67 @@
           <p><strong>Q: </strong>{{ questionDetails.question }}</p>
           <div class="label" *ngIf="questionDetails.questionType === 'single'">
             <div class="form-group">
-              <ng-container *ngFor="let optionDetails of questionDetails.options">
+              <ng-container
+                *ngFor="let optionDetails of questionDetails.options"
+              >
                 <label>
-                  <input type="radio" [name]="questionDetails.question" [value]="optionDetails.option"
-                    [checked]="questionDetails.answer === optionDetails.option" disabled>{{ optionDetails.option }}
+                  <input
+                    type="radio"
+                    [name]="questionDetails.question"
+                    [value]="optionDetails.option"
+                    [checked]="questionDetails.answer === optionDetails.option"
+                    disabled
+                  />{{ optionDetails.option }}
                 </label>
-                <br>
+                <br />
               </ng-container>
             </div>
           </div>
-          <div class="label" *ngIf="questionDetails.questionType === 'multiple'">
+          <div
+            class="label"
+            *ngIf="questionDetails.questionType === 'multiple'"
+          >
+            <!-- {{ questionDetails.answer | keyvalue | json }}
+            {{ questionDetails.answer | json }} -->
+
             <div class="form-group">
-              <ng-container *ngFor="let optionDetails of questionDetails.options; let i=index;">
+              <ng-container
+                *ngFor="
+                  let optionDetails of questionDetails.options;
+                  let i = index
+                "
+              >
                 <label>
-                  <input type="checkbox" [name]="optionDetails.option.substring(0,3)+ i" [value]="optionDetails.option"
-                    [checked]="questionDetails.answer[optionDetails.option.substring(0,3)+ i]" disabled>{{
-                  optionDetails.option
-                  }}
+                  <input
+                    type="checkbox"
+                    [name]="optionDetails.option.substring(0, 3) + i"
+                    [value]="optionDetails.option"
+                    [checked]="
+                      castAsKeyValue(questionDetails.answer)[
+                        optionDetails.option.substring(0, 3) + i
+                      ]
+                    "
+                    disabled
+                  />{{ optionDetails.option }}
                 </label>
-                <br>
+                <br />
               </ng-container>
             </div>
           </div>
           <label class="label" *ngIf="questionDetails.questionType === 'open'">
-            <textarea class="form-control" placeholder="Enter Question" [value]="questionDetails.answer"
-              disabled></textarea>
+            <textarea
+              class="form-control"
+              placeholder="Enter Question"
+              [value]="questionDetails.answer"
+              disabled
+            ></textarea>
           </label>
         </div>
         <div class="action">
-          <button class="btn btn-edit-question" (click)="clearAnswer(questionDetails)">
+          <button
+            class="btn btn-edit-question"
+            (click)="clearAnswer(questionDetails)"
+          >
             Clear Answer
           </button>
         </div>

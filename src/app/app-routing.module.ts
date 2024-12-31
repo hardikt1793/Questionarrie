@@ -1,31 +1,35 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { NgModule } from "@angular/core";
+import { RouterModule, Routes } from "@angular/router";
 
-import { AddQuestionComponent } from './components/add-question/add-question.component';
-import { QuestionListComponent } from './components/question-list/question-list.component';
-import { QuestionManagementComponent } from './components/question-management/question-management.component';
+import { AddQuestionComponent } from "./components/add-question/add-question.component";
+import { QuestionListComponent } from "./components/question-list/question-list.component";
+import { QuestionManagementComponent } from "./components/question-management/question-management.component";
 
 const routes: Routes = [
   {
-    path: '',
-    redirectTo: 'question-management',
-    pathMatch: 'full',
+    path: "",
+    redirectTo: "question-management",
+    pathMatch: "full",
   },
   {
-    path: 'add-question',
+    path: "add-question",
     component: AddQuestionComponent,
   },
   {
-    path: 'edit-question/:id',
+    path: "edit-question/:id",
     component: AddQuestionComponent,
   },
   {
-    path: 'question-list',
+    path: "question-list",
     component: QuestionListComponent,
   },
   {
-    path: 'question-management',
+    path: "question-management",
     component: QuestionManagementComponent,
+  },
+  {
+    path: "**",
+    redirectTo: "question-management",
   },
 ];
 

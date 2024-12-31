@@ -1,20 +1,24 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from "@angular/core";
+import { Question } from "src/app/models/question.model";
 
 @Component({
-  selector: 'app-question-management',
-  templateUrl: './question-management.component.html',
-  styleUrls: ['./question-management.component.scss'],
+  selector: "app-question-management",
+  templateUrl: "./question-management.component.html",
+  styleUrls: ["./question-management.component.scss"],
 })
 export class QuestionManagementComponent implements OnInit {
-  questionsList: any = [];
+  // list of questions
+  questionsList: Question[] = [];
 
-  questionId: string = '';
+  // to track the question id
+  questionId: string = "";
 
-  showDeleteModal: boolean = false;
+  // flag to show/hide delete modal
+  isshowDeleteModal: boolean = false;
 
   ngOnInit(): void {
-    this.questionsList = JSON.parse(localStorage.getItem('questions')!)?.sort(
-      (a: any, b: any) => {
+    this.questionsList = JSON.parse(localStorage.getItem("questions")!)?.sort(
+      (a: Question, b: Question) => {
         const dateA: Date = new Date(a.createdAt),
           dateB: Date = new Date(b.createdAt);
 
@@ -26,29 +30,34 @@ export class QuestionManagementComponent implements OnInit {
   }
 
   // Function to close modal when the user clicks anywhere outside of it
-  @HostListener('click', ['$event'])
+  @HostListener("click", ["$event"])
   function(event: any) {
-    const element: any = document.getElementById('deleteQuestionModal');
+    const element: any = document.getElementById("deleteQuestionModal");
 
     if (event.target == element) {
-      this.showDeleteModal = false;
+      this.isshowDeleteModal = false;
     }
   }
 
-  // Open confirmation dialog for deleting the question
-  deleteConfirmation(id: string) {
+  /**
+   * Open confirmation dialog for deleting the question.
+   * @param id - id of the question to be deleted
+   */
+  deleteConfirmation(id: string): void {
     this.questionId = id;
-    this.showDeleteModal = true;
+    this.isshowDeleteModal = true;
   }
 
-  // Delete the question
-  deleteQuestion() {
+  /**
+   * Delete the question.
+   */
+  deleteQuestion(): void {
     this.questionsList = this.questionsList.filter(
-      (element: any) => element.createdAt !== this.questionId
+      (element: Question) => element.createdAt !== this.questionId
     );
 
-    localStorage.setItem('questions', JSON.stringify(this.questionsList));
+    localStorage.setItem("questions", JSON.stringify(this.questionsList));
 
-    this.showDeleteModal = false;
+    this.isshowDeleteModal = false;
   }
 }

@@ -13,45 +13,60 @@
   <div class="content">
     <div class="card" *ngFor="let questionDetails of questionsList">
       <div class="question-details">
+        <p><strong>Q: </strong>{{ questionDetails?.question }}</p>
         <p>
-          <strong>Q: </strong>{{ questionDetails?.question}}
+          <strong>Type: </strong
+          >{{
+            questionDetails?.questionType !== "open"
+              ? (questionDetails?.questionType | titlecase) + " Choice"
+              : "Open"
+          }}
         </p>
         <p>
-          <strong>Type: </strong>{{ questionDetails?.questionType !== "open" ? (questionDetails?.questionType |
-          titlecase) + " Choice" : "Open" }}
-        </p>
-        <p>
-          <strong>Created Date: </strong>{{ questionDetails?.createdAt | date:'dd/MM/yyyy, h:mm a' }}
+          <strong>Created Date: </strong
+          >{{ questionDetails?.createdAt | date : "dd/MM/yyyy, h:mm a" }}
         </p>
       </div>
       <div class="action">
-        <button type="button" class="btn btn-delete-question" (click)="deleteConfirmation(questionDetails?.createdAt)">
+        <button
+          type="button"
+          class="btn btn-delete-question"
+          (click)="deleteConfirmation(questionDetails?.createdAt!)"
+        >
           Delete
         </button>
-        <button type="button" class="btn btn-edit-question"
-          [routerLink]="['/edit-question',questionDetails?.createdAt]">
+        <button
+          type="button"
+          class="btn btn-edit-question"
+          [routerLink]="['/edit-question', questionDetails?.createdAt]"
+        >
           Edit
         </button>
       </div>
     </div>
-    <div class="card no-records" *ngIf="questionsList?.length === 0 || questionsList === undefined">
+    <div
+      class="card no-records"
+      *ngIf="questionsList?.length === 0 || questionsList === undefined"
+    >
       <h4>No records!</h4>
     </div>
   </div>
 </div>
 
 <!-- -------------------- Modal for deleting a question -------------------- -->
-<div id="deleteQuestionModal" class="modal" *ngIf="showDeleteModal">
+<div id="deleteQuestionModal" class="modal" *ngIf="isshowDeleteModal">
   <div class="modal-content">
     <div class="div-close">
-      <a class="close" (click)="showDeleteModal = false">&times;</a>
+      <a class="close" (click)="isshowDeleteModal = false">&times;</a>
     </div>
     <div class="div-confirmation">
       <p>Are you sure you want to delete this question?</p>
     </div>
     <div class="div-buttons">
-      <button class="btn btn-delete-question" (click)="deleteQuestion()">Confirm</button>
-      <button class="btn" (click)="showDeleteModal = false">Cancel</button>
+      <button class="btn btn-delete-question" (click)="deleteQuestion()">
+        Confirm
+      </button>
+      <button class="btn" (click)="isshowDeleteModal = false">Cancel</button>
     </div>
   </div>
 </div>
